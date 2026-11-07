@@ -1,2 +1,18 @@
-bin
-obj
+# Build outputs
+**/bin/
+**/obj/
+
+# Development settings and secrets
+**/appsettings.Development.json
+**/secrets.json
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
