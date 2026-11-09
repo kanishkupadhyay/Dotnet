@@ -1,8 +1,10 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyWebApi.DTOs.Request;
 using MyWebApi.Services.CQRS.Command.Login;
 using MyWebApi.Services.CQRS.Command.Register;
+using MyWebApi.Services.CQRS.Query.GetUsers;
 
 namespace MyWebApi.Controllers;
 
@@ -40,6 +42,15 @@ public class AuthController : ControllerBase
             Email = request.email,
             Password = request.password
         });
+
+        return StatusCode(response.Status, response);
+    }
+
+    [HttpGet("users")]
+    [Authorize]
+    public async Task<IActionResult> GetUsers()
+    {
+        var response = await _mediator.Send(new GetUsersQuery());
 
         return StatusCode(response.Status, response);
     }
