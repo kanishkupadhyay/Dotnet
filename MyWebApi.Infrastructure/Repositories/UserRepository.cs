@@ -19,9 +19,9 @@ public class UserRepository : IUserRepository
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task<List<User>> GetUsersAsync()
+    public async Task<List<User>> GetUsersAsync(int page, int size)
     {
-        return await _context.Users.ToListAsync();
+        return await _context.Users.Skip((page - 1) * size).Take(size).ToListAsync();
     }
 
     public async Task AddAsync(User user)

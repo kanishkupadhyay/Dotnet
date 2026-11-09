@@ -16,7 +16,7 @@ public class GetUsersQueryHandler: IRequestHandler<GetUsersQuery, ApiResponse<Li
 
     public async Task<ApiResponse<List<User>>> Handle(GetUsersQuery query, CancellationToken cancellationToken)
     {
-        var users = await _userRepository.GetUsersAsync();
+        var users = await _userRepository.GetUsersAsync(query.Page, query.Size);
         return ApiResponse<List<User>>.OkResponse(SuccessMessages.UsersFetchedSuccessfully, users);
     }
 }

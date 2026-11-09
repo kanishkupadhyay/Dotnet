@@ -5,6 +5,7 @@ using MyWebApi.DTOs.Request;
 using MyWebApi.Services.CQRS.Command.Login;
 using MyWebApi.Services.CQRS.Command.Register;
 using MyWebApi.Services.CQRS.Query.GetUsers;
+using MyWebApi.Services.DTOs.Request;
 
 namespace MyWebApi.Controllers;
 
@@ -48,9 +49,9 @@ public class AuthController : ControllerBase
 
     [HttpGet("users")]
     [Authorize]
-    public async Task<IActionResult> GetUsers()
+    public async Task<IActionResult> GetUsers([FromQuery] GetUsersQueryRequest query)
     {
-        var response = await _mediator.Send(new GetUsersQuery());
+        var response = await _mediator.Send(new GetUsersQuery(query));
 
         return StatusCode(response.Status, response);
     }
