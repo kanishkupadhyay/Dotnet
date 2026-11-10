@@ -2,5 +2,6 @@
   <Project Path="MyWebApi.Domain/MyWebApi.Domain.csproj" />
   <Project Path="MyWebApi.Infrastructure/MyWebApi.Infrastructure.csproj" />
   <Project Path="MyWebApi.Services/MyWebApi.Services.csproj" />
+  <Project Path="MyWebApi.Tests/MyWebApi.Tests.csproj" />
   <Project Path="MyWebApi/MyWebApi.csproj" />
 </Solution>

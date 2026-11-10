@@ -1,11 +1,12 @@
 using MediatR;
-using MyWebApi.Domain.Entities;
 using MyWebApi.Domain.Interfaces;
 using MyWebApi.Services.Constants;
+using MyWebApi.Services.DTOs.Response;
+using MyWebApi.Services.Mappers;
 
 namespace MyWebApi.Services.CQRS.Query.GetUsers;
 
-public class GetUsersQueryHandler: IRequestHandler<GetUsersQuery, ApiResponse<List<User>>>
+public class GetUsersQueryHandler: IRequestHandler<GetUsersQuery, ApiResponse<List<UserResponse>>>
 {
     private readonly IUserRepository _userRepository;
 
@@ -14,9 +15,11 @@ public class GetUsersQueryHandler: IRequestHandler<GetUsersQuery, ApiResponse<Li
         _userRepository = userRepository;
     }
 
-    public async Task<ApiResponse<List<User>>> Handle(GetUsersQuery query, CancellationToken cancellationToken)
+    public async Task<ApiResponse<List<UserResponse>>> Handle(GetUsersQuery query, CancellationToken cancellationToken)
     {
         var users = await _userRepository.GetUsersAsync(query.Page, query.Size);
-        return ApiResponse<List<User>>.OkResponse(SuccessMessages.UsersFetchedSuccessfully, users);
+        var userResponses = users.Select(user => user.ToResponse()).ToList();
+
+        return ApiResponse<List<UserResponse>>.OkResponse(SuccessMessages.UsersFetchedSuccessfully, userResponses);
     }
 }

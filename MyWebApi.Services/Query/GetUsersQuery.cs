@@ -1,10 +1,10 @@
 using MediatR;
-using MyWebApi.Domain.Entities;
 using MyWebApi.Services.DTOs.Request;
+using MyWebApi.Services.DTOs.Response;
 
 namespace MyWebApi.Services.CQRS.Query.GetUsers;
 
-public class GetUsersQuery : IRequest<ApiResponse<List<User>>>
+public class GetUsersQuery : IRequest<ApiResponse<List<UserResponse>>>
 {
     public int Page { get; set; }
     public int Size { get; set; }
