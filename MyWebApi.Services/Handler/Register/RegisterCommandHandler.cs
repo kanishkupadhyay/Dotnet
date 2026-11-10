@@ -78,6 +78,6 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ApiRespon
 
         await _userRepository.AddAsync(user);
         await _userRepository.SaveChangesAsync();
-        return ApiResponse<object>.OkResponse(SuccessMessages.RegistrationSuccessful);
+        return ApiResponse<object>.CreatedResponse(SuccessMessages.RegistrationSuccessful);
     }
 }

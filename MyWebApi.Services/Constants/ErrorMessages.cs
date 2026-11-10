@@ -13,4 +13,10 @@ public static class ErrorMessages
     public const string PasswordTooShort = "Password must be at least 8 characters long";
     public const string PasswordTooLong = "Password cannot exceed 100 characters";
     public const string UserAlreadyExists = "A user with this email already exists";
+
+    // Blog related error messages
+    public const string BlogNotFound = "Blog not found.";
+    public const string TitleCannotBeNullOrEmpty = "Title cannot be null or empty.";
+    public const string ContentCannotBeNullOrEmpty = "Content cannot be null or empty.";
+    public const string UserIdNotAvailable = "User ID is not available.";
 }

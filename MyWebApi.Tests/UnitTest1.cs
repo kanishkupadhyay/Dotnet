@@ -1,4 +1,5 @@
-﻿using MyWebApi.Domain.Entities;
+﻿using System.Text.Json;
+using MyWebApi.Domain.Entities;
 using MyWebApi.Domain.Interfaces;
 using MyWebApi.Services.CQRS.Query.GetUsers;
 using MyWebApi.Services.DTOs.Request;
@@ -36,6 +37,27 @@ public class GetUsersQueryHandlerTests
         Assert.Equal("jane@example.com", data[0].Email);
         Assert.DoesNotContain(typeof(UserResponse).GetProperties(), property => property.Name == "PasswordHash");
         Assert.Equal("Jane", data[0].FirstName);
+    }
+
+    [Fact]
+    public void CreateBlogResponse_ShouldNotSerializeApiWrapperFields()
+    {
+        var response = new CreateBlogResponse
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test title",
+            Content = "Test content",
+            AuthorId = Guid.NewGuid(),
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var json = JsonSerializer.Serialize(response);
+
+        Assert.DoesNotContain("status", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("success", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("message", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("title", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("content", json, StringComparison.OrdinalIgnoreCase);
     }
 
     private sealed class StubUserRepository(List<User> users) : IUserRepository

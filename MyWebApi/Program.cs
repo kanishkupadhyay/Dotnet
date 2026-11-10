@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi;
 using MyWebApi.Swagger;
+using MyWebApi.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,10 +75,14 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddApplicationCqrs();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddHttpContextAccessor();
+
 // Dependency Injection
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 // Swagger Configuration
 builder.Services.AddEndpointsApiExplorer();
