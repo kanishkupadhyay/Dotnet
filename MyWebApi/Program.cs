@@ -19,6 +19,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 // JWT Authentication
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -114,6 +117,8 @@ if (app.Environment.IsDevelopment())
         options.EnablePersistAuthorization();
     });
 }
+
+app.UseExceptionHandler();
 
 app.UseMiddleware<RequestLoggingMiddleware>();
 
