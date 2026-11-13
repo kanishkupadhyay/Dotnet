@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using MyWebApi.Services.Constants;
 using MyWebApi.Services.CQRS.Command.CreateBlog;
 using MyWebApi.Services.CQRS.Command.DeleteBlogById;
+using MyWebApi.Services.CQRS.Command.UpdateBlogById;
 using MyWebApi.Services.CQRS.Query.GetBlogById;
+using MyWebApi.Services.CQRS.Query.GetBlogListQuery;
 using MyWebApi.Services.DTOs.Request;
 
 namespace MyWebApi.Controllers;
@@ -21,7 +23,7 @@ public class BlogController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost("create")]
-    public async Task<IActionResult> createBlog([FromBody] CreateBlogCommandRequest command)
+    public async Task<IActionResult> CreateBlog([FromBody] CreateBlogCommandRequest command)
     {
         var response = await _mediator.Send(new CreateBlogCommand
         {
@@ -34,7 +36,7 @@ public class BlogController : ControllerBase
     }
 
     [HttpGet("get/{id}")]
-    public async Task<IActionResult> getBlogById([FromRoute] Guid id)
+    public async Task<IActionResult> GetBlogById([FromRoute] Guid id)
     {
         var response = await _mediator.Send(new GetBlogByIdQuery { Id = id });
 
@@ -43,15 +45,28 @@ public class BlogController : ControllerBase
 
 
     [HttpDelete("delete/{id}")]
-    public async Task<IActionResult> deleteBlog([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteBlogById([FromRoute] Guid id)
     {
-        var response = _mediator.Send(new DeleteBlogByIdCommand { Id = id });
-        return StatusCode((int)response.Status, response);
+        var response = await _mediator.Send(new DeleteBlogByIdCommand { Id = id });
+        return StatusCode(response.Status, response);
     }
 
     [HttpPatch("update/{id}")]
-    public Task<IActionResult> updateBlog([FromRoute] Guid id)
+    public async Task<IActionResult> UpdateBlog([FromRoute] Guid id, [FromBody] UpdateBlogRequest command)
     {
-        return Task.FromResult<IActionResult>(Ok(SuccessMessages.BlogFetchedSuccessfully));
+        var response = await _mediator.Send(new UpdateBlogByIdCommand(id, new UpdateBlogRequest
+        {
+            Title = command.Title,
+            Content = command.Content,
+            ImageUrl = command.ImageUrl
+        }));
+        return StatusCode(response.Status, response);
+    }
+
+    [HttpGet("list")]
+    public async Task<IActionResult> GetBlogList([FromQuery] GePaginationRequest query)
+    {
+        var response = await _mediator.Send(new GetBlogListQuery(query));
+        return StatusCode(response.Status, response);
     }
 }

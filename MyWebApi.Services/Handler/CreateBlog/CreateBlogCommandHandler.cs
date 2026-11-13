@@ -38,7 +38,7 @@ public class CreateBlogCommandHandler : IRequestHandler<CreateBlogCommand, ApiRe
                 AuthorId = _currentUserService.UserId ?? throw new InvalidOperationException(ErrorMessages.UserIdNotAvailable),
             };
 
-            await _blogRepository.CreateBlogAsync(blog);
+            await _blogRepository.CreateBlogAsync(blog, cancellationToken);
 
             return ApiResponse<BlogResponse>.CreatedResponse(SuccessMessages.BlogCreatedSuccessfully, blog.ToResponse());
         }

@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
 
     [HttpGet("users")]
     [Authorize]
-    public async Task<IActionResult> GetUsers([FromQuery] GetUsersQueryRequest query)
+    public async Task<IActionResult> GetUsers([FromQuery] GePaginationRequest query)
     {
         var response = await _mediator.Send(new GetUsersQuery(query));
 

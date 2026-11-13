@@ -9,7 +9,7 @@ public class GetUsersQuery : IRequest<ApiResponse<List<UserResponse>>>
     public int Page { get; set; }
     public int Size { get; set; }
 
-    public GetUsersQuery(GetUsersQueryRequest query)
+    public GetUsersQuery(GePaginationRequest query)
     {
         Page = query.Page;
         Size = query.Size;

@@ -6,6 +6,8 @@ public static class SuccessMessages
     public const string LoginSuccessful = "Login successful";
     public const string UsersFetchedSuccessfully = "Users fetched successfully";
     public const string BlogCreatedSuccessfully = "Blog created successfully";
+    public const string BlogUpdatedSuccessfully = "Blog updated successfully.";
     public const string BlogDeletedSuccessfully = "Blog deleted successfully";
     public const string BlogFetchedSuccessfully = "Blog fetched successfully";
+    public const string BlogsFetchedSuccessfully = "Blogs fetched successfully.";
 }
