@@ -6,11 +6,6 @@ using MyWebApi.Domain.Interfaces;
 using MyWebApi.Infrastructure.Repositories;
 using MyWebApi.Services.Security;
 using MyWebApi.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi;
-using MyWebApi.Swagger;
 using MyWebApi.Domain.Entities;
 using MyWebApi.Middlewares;
 using MyWebApi.Extensions;
@@ -24,30 +19,7 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 // JWT Authentication
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(
-                    builder.Configuration["Jwt:Key"]!
-                )
-            ),
-
-            ClockSkew = TimeSpan.Zero
-        };
-    });
-
+builder.Services.AddCustomJwtAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.AddCustomRateLimiting();
 
@@ -92,21 +64,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 // Swagger Configuration
 builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        Description = "Enter your JWT token"
-    });
-
-    options.OperationFilter<AuthorizeCheckOperationFilter>();
-});
-
+builder.Services.AddSwaggerExtensions();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
