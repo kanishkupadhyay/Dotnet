@@ -13,6 +13,7 @@ using Microsoft.OpenApi;
 using MyWebApi.Swagger;
 using MyWebApi.Domain.Entities;
 using MyWebApi.Middlewares;
+using MyWebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,7 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
+builder.Services.AddCustomRateLimiting();
 
 // Customize DTO Validation Error Response
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -125,6 +127,9 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseRateLimiter();
+
 app.UseAuthorization();
 
 app.MapControllers();
