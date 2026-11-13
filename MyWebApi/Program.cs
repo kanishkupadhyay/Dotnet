@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.OpenApi;
 using MyWebApi.Swagger;
 using MyWebApi.Domain.Entities;
+using MyWebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,6 +114,8 @@ if (app.Environment.IsDevelopment())
         options.EnablePersistAuthorization();
     });
 }
+
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseHttpsRedirection();
 
